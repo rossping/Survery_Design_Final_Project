@@ -23,18 +23,53 @@ suppressPackageStartupMessages(library(tidyverse))
 merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2)
 
 write_excel_csv(merged_data, 'Data/merged_data.xlsx')
+view(merged_data)
 ```
 
 ```{r}
 unique(merged_data$Language)
 ```
 
-```{r}
+```{r, working with the text}
 library(tidytext)
-tidy_merged_data <- merged_data%>%
-  group_by(Text)
+library(tm)
+library(dplyr)
+library(NLP)
 
 
-tolower(merged_data$Text) -> merged_data$clean_text
+for (index in seq_along(merged_data$Text[1])) {
+  tweet = strsplit(merged_data$Text[index], split = ' ')
+  print(length(tweet))
+  for(word_tweet in tweet){
+    for(word in word_tweet){
+      word = tolower(word)
+      word = removePunctuation(word)
+      print(word)
+    }
+    }
+  }
+
+if('Ross' %in% stop_words$word){
+  print(TRUE)
+}
 ```
 
+
+strsplit(merged_data$Text[1], split = ' ')
+merged_data$
+   merged_data$Text[index] <- final_tweet
+final_tweet <- append(final_tweet, word)
+
+  for(word in tweet[index]){
+    word = tolower(word)
+    word = removePunctuation(word)
+    if (length(word) == 0){
+      remove(word)
+    }
+    if(word %in% stop_words$word){
+      remove(word)
+    
+    }
+  
+  }
+  }
