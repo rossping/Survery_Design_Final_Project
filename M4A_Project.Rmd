@@ -30,46 +30,31 @@ view(merged_data)
 unique(merged_data$Language)
 ```
 
-```{r, working with the text}
+```{r, working with the text, fig.width=12, fig.height=4.5}
 library(tidytext)
 library(tm)
 library(dplyr)
 library(NLP)
+#https://stackoverflow.com/questions/36824296/r-remove-specific-word-in-a-txte-like-the-this
+
+corpus <- Corpus(VectorSource(merged_data$Text))
 
 
-for (index in seq_along(merged_data$Text[1])) {
-  tweet = strsplit(merged_data$Text[index], split = ' ')
-  print(length(tweet))
-  for(word_tweet in tweet){
-    for(word in word_tweet){
-      word = tolower(word)
-      word = removePunctuation(word)
-      print(word)
-    }
-    }
-  }
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, tolower)
+corpus <- tm_map(corpus, removeWords, stopwords("english")) 
+corpus <- tm_map(corpus, stripWhitespace)
+corpus <- tm_map(corpus, stemDocument)
 
-if('Ross' %in% stop_words$word){
-  print(TRUE)
-}
+doc_matrix <- TermDocumentMatrix(corpus)
+doc_matrix_m <- as.matrix(doc_matrix)
+doc_matrix_val <- sort(rowSums(doc_matrix_m), decreasing = T)
+doc_matrix_df <- data.frame(word = names(doc_matrix_val), freq = doc_matrix_val)
+
+top_20 <- head(doc_matrix_df, 20)
+
+top_20%>%
+  ggplot(aes(reorder(word,freq), freq)) + geom_bar(stat = "identity") + xlab("Term") + ylab("Frequency") + labs(title = "Most Frequent Terms Within Tweets Relating to Medicare For All")
+
 ```
-
-
-strsplit(merged_data$Text[1], split = ' ')
-merged_data$
-   merged_data$Text[index] <- final_tweet
-final_tweet <- append(final_tweet, word)
-
-  for(word in tweet[index]){
-    word = tolower(word)
-    word = removePunctuation(word)
-    if (length(word) == 0){
-      remove(word)
-    }
-    if(word %in% stop_words$word){
-      remove(word)
-    
-    }
-  
-  }
-  }
