@@ -5,23 +5,22 @@ date: "10/30/2020"
 output: pdf_document
 ---
 
-<<<<<<< HEAD
-```{r, warning=FALSE, message=FALSE}
-=======
-```{r}
->>>>>>> e69bd1d72c0550b9c1b7c5dc764861b4592959c9
+```{r, message=FALSE, warning=FALSE}
 library(readxl)
 medicare_for_all_1 <- read_excel("Data/medicare_for_all_1.xlsx")
 single_payer_system_1 <- read_excel("Data/single_payer_system_1.xlsx")
 universal_health_care_1 <- read_excel("Data/universal_health_care_1.xlsx")
+medicare_for_all_2 <- read_excel("Data/medicare_for_all_2.xlsx")
+single_payer_system_2 <- read_excel("Data/single_payer_system_2.xlsx")
+universal_health_care_2 <- read_excel("Data/universal_health_care_2.xlsx")
 
+data_names <- c(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2)
 ```
 
-<<<<<<< HEAD
+
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
-merged_data <- bind_rows(medicare_for_all_1, single_payer_system_1, universal_health_care_1)
+merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2)
 ```
 
-=======
->>>>>>> e69bd1d72c0550b9c1b7c5dc764861b4592959c9
+
