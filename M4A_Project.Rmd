@@ -1,0 +1,15 @@
+---
+title: "M4A_Project"
+author: "Ross Pingatore"
+date: "10/30/2020"
+output: pdf_document
+---
+
+```{r}
+library(readxl)
+medicare_for_all_1 <- read_excel("Data/medicare_for_all_1.xlsx")
+single_payer_system_1 <- read_excel("Data/single_payer_system_1.xlsx")
+universal_health_care_1 <- read_excel("Data/universal_health_care_1.xlsx")
+
+```
+
