@@ -21,6 +21,8 @@ data_names <- c(medicare_for_all_1,single_payer_system_1,universal_health_care_1
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
 merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2)
+
+write_excel_csv(merged_data, 'Data/merged_data.xlsx')
 ```
 
 ```{r}
