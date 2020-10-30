@@ -27,3 +27,12 @@ merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_heal
 unique(merged_data$Language)
 ```
 
+```{r}
+library(tidytext)
+tidy_merged_data <- merged_data%>%
+  group_by(Text)
+
+
+tolower(merged_data$Text) -> merged_data$clean_text
+```
+
