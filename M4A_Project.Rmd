@@ -47,7 +47,6 @@ corpus <- tm_map(corpus, removeWords, stopwords("english"))
 corpus <- tm_map(corpus, stripWhitespace)
 corpus <- tm_map(corpus, stemDocument)
 
-tidy_corpus <- tidy.Corpus(corpus, collapse(''))
 
 doc_matrix <- TermDocumentMatrix(corpus)
 doc_matrix_m <- as.matrix(doc_matrix)
@@ -55,8 +54,52 @@ doc_matrix_val <- sort(rowSums(doc_matrix_m), decreasing = T)
 doc_matrix_df <- data.frame(word = names(doc_matrix_val), freq = doc_matrix_val)
 
 top_20 <- head(doc_matrix_df, 20)
+top_20
+```
 
+```{r, bar chart}
 top_20%>%
   ggplot(aes(reorder(word,freq), freq)) + geom_bar(stat = "identity") + xlab("Term") + ylab("Frequency") + labs(title = "Most Frequent Terms Within Tweets Relating to Medicare For All")
 
+```
+
+```{r, associations}
+findAssocs(doc_matrix, terms = c('health','care','system'), corlimit = 0.25)
+
+```
+
+```{r, sentiment scores, warning=F}
+df <- data.frame(text = character())
+for(index in seq_along(corpus)){
+  tweet <- corpus[[index]]$content
+  tokens <- data_frame(text = tweet) %>% unnest_tokens(word,text)
+  tokens%>%
+     inner_join(get_sentiments("bing"))%>%
+    count(sentiment)%>%
+    spread(sentiment, n, fill = 0) -> rating
+}
+rating
+```
+
+```{r}
+tokens <- data_frame(text = merged_data$Text[1]) %>% unnest_tokens(word, text)
+tokens
+tokens%>%
+    inner_join(get_sentiments("bing"))%>%
+    count(sentiment)%>%
+    spread(sentiment, n, fill = 0) -> x
+
+
+
+cbind(merged_data[1,], x)
+
+
+
+  print(tweet)
+  tokens%>%
+    inner_join(get_sentiments("bing"))%>%
+    count(sentiment)%>%
+    spread(sentiment, n, fill = 0) -> rating
+  cbind(tweet, rating)
+  
 ```
