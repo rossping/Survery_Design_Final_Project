@@ -47,6 +47,8 @@ corpus <- tm_map(corpus, removeWords, stopwords("english"))
 corpus <- tm_map(corpus, stripWhitespace)
 corpus <- tm_map(corpus, stemDocument)
 
+tidy_corpus <- tidy.Corpus(corpus, collapse(''))
+
 doc_matrix <- TermDocumentMatrix(corpus)
 doc_matrix_m <- as.matrix(doc_matrix)
 doc_matrix_val <- sort(rowSums(doc_matrix_m), decreasing = T)
