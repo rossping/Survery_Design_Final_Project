@@ -25,6 +25,8 @@ data_names <- c(medicare_for_all_1,single_payer_system_1,universal_health_care_1
 suppressPackageStartupMessages(library(tidyverse))
 merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2,medicare_for_all_3,single_payer_system_3,universal_health_care_3)
 
+merged_data[!duplicated(merged_data$Text),] -> merged_data
+
 write_excel_csv(merged_data, 'Data/merged_data.xlsx')
 view(merged_data)
 ```
@@ -68,7 +70,6 @@ top_20%>%
 
 ```{r, associations, echo=FALSE}
 findAssocs(doc_matrix, terms = c('health','care','system', 'biden', 'trump'), corlimit = 0.25)
-
 ```
 
 ```{r, sentiment scores, warning=F, message=FALSE, echo=FALSE}
@@ -100,10 +101,7 @@ for(index in seq_along(corpus)){
   if (ncol(rating) == 2) {
     df_sentiment%>%
       add_row(negative = rating$negative, positive = rating$positive, text = tweet) -> df_sentiment
-    
   }
-  
-
 }
 ```
 
@@ -115,6 +113,7 @@ df_sentiment%>%
 df_sentiment%>%
   mutate(total = positive - negative) -> df_sentiment
 
+df_sentiment[!duplicated(df_sentiment$text),] -> df_sentiment
 write_excel_csv(df_sentiment, 'Data/sentiment_scores.xlsx')
 ```
 
@@ -131,6 +130,8 @@ summary(df_sentiment$total)
 
 dim(df_sentiment)
 corpus
+
+view(df_sentiment)
 ```
 
 
