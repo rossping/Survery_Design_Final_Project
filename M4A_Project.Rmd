@@ -39,7 +39,7 @@ view(merged_data)
 unique(merged_data$Language)
 ```
 
-```{r, working with the text, fig.width=12, fig.height=4.5, echo=FALSE, warning=FALSE, message=FALSE}
+```{r, working with the text, fig.width=14, fig.height=4.5, echo=FALSE, warning=FALSE, message=FALSE}
 library(tidytext)
 library(tm)
 library(dplyr)
@@ -61,12 +61,12 @@ doc_matrix_m <- as.matrix(doc_matrix)
 doc_matrix_val <- sort(rowSums(doc_matrix_m), decreasing = T)
 doc_matrix_df <- data.frame(word = names(doc_matrix_val), freq = doc_matrix_val)
 
-top_20 <- head(doc_matrix_df, 20)
-top_20
+top_15 <- head(doc_matrix_df, 15)
+top_15
 ```
 
-```{r, bar chart, echo=FALSE}
-top_20%>%
+```{r, bar chart, echo=FALSE, fig.width=10}
+top_15%>%
   ggplot(aes(reorder(word,freq), freq)) + geom_bar(stat = "identity") + xlab("Term") + ylab("Frequency") + labs(title = "Most Frequent Terms Within Tweets Relating to Medicare For All")
 
 ```
@@ -121,7 +121,7 @@ write_excel_csv(df_sentiment, 'Data/sentiment_scores.xlsx')
 ```
 
 
-```{r, sentiment score visualization, warning=FALSE, message=FALSE, echo=FALSE}
+```{r, sentiment score visualization, warning=FALSE, message=FALSE, echo=FALSE, fig.width=10}
 df_sentiment%>%
   mutate(fill_total = factor(total, levels = unique(total), ordered = T),
     fill_col = case_when(
@@ -144,7 +144,7 @@ summary(df_sentiment$total)
 
 
 ```
-```{r, sentiment analysis continued}
+```{r, sentiment analysis continued, echo=FALSE}
 df_sentiment%>%
   filter(total > 0)%>%
   nrow() -> favor
@@ -170,7 +170,7 @@ number_of_tweets
 percentages
 ```
 
-```{r}
+```{r, echo=FALSE}
 library(plotrix)
 slices <- c(percentages$Favor, percentages$Neutral, percentages$Dislike)
 lab <- names(percentages)
