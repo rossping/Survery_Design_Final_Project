@@ -171,7 +171,7 @@ number_of_tweets
 percentages
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.width=10}
 library(plotrix)
 slices <- c(percentages$Favor, percentages$Neutral, percentages$Dislike)
 lab <- names(percentages)
