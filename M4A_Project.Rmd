@@ -120,18 +120,37 @@ write_excel_csv(df_sentiment, 'Data/sentiment_scores.xlsx')
 
 ```{r, sentiment score visualization, warning=FALSE, message=FALSE, echo=FALSE}
 df_sentiment%>%
-  ggplot(aes(total)) + labs(title = "Distribution of Sentiment Towards Medicare For All", x = 'Sentiment Rating (5 Highly Positive, -5 Highly Negative)', y = "Number of Tweets") + theme(plot.title = element_text(hjust = 0.5)) -> fig_1
+  mutate(fill_total = factor(total, levels = unique(total), ordered = T),
+    fill_col = case_when(
+      total > 0 ~ "green",
+      total < 0 ~ "red",
+      TRUE ~ "grey"
+    )) -> df_sentiment
 
-par(mfrow = c(2,2))
-fig_1 + geom_histogram() 
-fig_1 + geom_density()
+df_sentiment%>%
+  ggplot(aes(total, fill = fill_col)) + labs(title = "Distribution of Sentiment Towards Medicare For All", x = 'Sentiment Rating (5 Highly Positive, -5 Highly Negative)', y = "Number of Tweets") + theme(plot.title = element_text(hjust = 0.5)) -> fig_1
+
+attach(df_sentiment)
+palt <- c('Support' = ' green' , 'Neutral' = 'grey', 'Dislike' = 'red')
+
+fig_1 + geom_histogram() + labs(fill = "Sentiment") + scale_fill_identity(guide = "legend", labels = c("Favor", "Neutral", "Dislike"))
+fig_1 + geom_density() + labs(fill = "Sentiment") + scale_fill_identity(guide = "legend", labels = c("Favor", "Neutral", "Dislike"))
 
 summary(df_sentiment$total)
 
-dim(df_sentiment)
-corpus
 
-view(df_sentiment)
+
+```
+```{r, sentiment analysis continued}
+df_sentiment%>%
+  filter(total > 0)%>%
+  nrow() -> favor
+
+df_sentiment%>%
+  filter(total < 0)%>%
+  nrow() -> dislike
+
+data_frame(Favor = favor, Dislike = dislike)
 ```
 
 
