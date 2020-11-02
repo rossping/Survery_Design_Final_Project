@@ -68,8 +68,8 @@ findAssocs(doc_matrix, terms = c('health','care','system'), corlimit = 0.25)
 
 ```
 
-```{r, sentiment scores, warning=F}
-df <- data.frame(text = character())
+```{r, sentiment scores, warning=F, message=FALSE}
+df_sentiment <- data_frame(text = character(), positive = double(), negative = double())
 for(index in seq_along(corpus)){
   tweet <- corpus[[index]]$content
   tokens <- data_frame(text = tweet) %>% unnest_tokens(word,text)
@@ -77,6 +77,54 @@ for(index in seq_along(corpus)){
      inner_join(get_sentiments("bing"))%>%
     count(sentiment)%>%
     spread(sentiment, n, fill = 0) -> rating
+  if (ncol(rating) == 0){
+    next()
+  }
+  if (ncol(rating) == 1){
+    var_1 = names(rating[1])
+    if(var_1 == 'positive'){
+      rat = rating$positive
+      df_sentiment%>%
+        add_row(positive = rat, text = tweet) -> df_sentiment
+    }
+    if(var_1 == 'negative'){
+      rat = rating$negative
+      df_sentiment%>%
+        add_row(negative = rat, text = tweet) -> df_sentiment
+    }
+  }
+  
+  if (ncol(rating) == 2) {
+    df_sentiment%>%
+      add_row(negative = rating$negative, positive = rating$positive, text = tweet) -> df_sentiment
+    
+  }
+  
+
 }
-rating
 ```
+
+
+```{r, df_sentiment processing, warning=FALSE, message=FALSE}
+df_sentiment%>%
+  replace_na(list(positive = 0, negative = 0, text = "Blank")) -> df_sentiment
+
+df_sentiment%>%
+  mutate(total = positive - negative) -> df_sentiment
+
+write_excel_csv(df_sentiment, 'Data/sentiment_scores.xlsx')
+```
+
+
+```{r, sentiment score visualization, warning=FALSE, message=FALSE}
+df_sentiment%>%
+  ggplot(aes(total)) + labs(title = "Distribution of Sentiment Towards Medicare For All", x = 'Sentiment Rating (5 Highly Positive, -5 Highly Negative)', y = "Number of Tweets") + theme(plot.title = element_text(hjust = 0.5)) -> fig_1
+
+par(mfrow = c(2,2))
+fig_1 + geom_histogram() 
+fig_1 + geom_density()
+
+summary(df_sentiment$total)
+```
+
+

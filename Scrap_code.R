@@ -17,3 +17,10 @@ tokens%>%
   count(sentiment)%>%
   spread(sentiment, n, fill = 0) -> rating
 cbind(tweet, rating)
+
+
+
+
+
+
+
