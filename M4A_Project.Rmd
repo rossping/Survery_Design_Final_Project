@@ -5,7 +5,7 @@ date: "10/30/2020"
 output: pdf_document
 ---
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE,echo=FALSE}
 library(readxl)
 medicare_for_all_1 <- read_excel("Data/medicare_for_all_1.xlsx")
 single_payer_system_1 <- read_excel("Data/single_payer_system_1.xlsx")
@@ -13,24 +13,27 @@ universal_health_care_1 <- read_excel("Data/universal_health_care_1.xlsx")
 medicare_for_all_2 <- read_excel("Data/medicare_for_all_2.xlsx")
 single_payer_system_2 <- read_excel("Data/single_payer_system_2.xlsx")
 universal_health_care_2 <- read_excel("Data/universal_health_care_2.xlsx")
+medicare_for_all_3 <- read_excel("Data/medicare_for_all_3.xlsx")
+single_payer_system_3 <- read_excel("Data/single_payer_system_3.xlsx")
+universal_health_care_3 <- read_excel("Data/universal_health_care_3.xlsx")
 
 data_names <- c(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2)
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 suppressPackageStartupMessages(library(tidyverse))
-merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2)
+merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2,medicare_for_all_3,single_payer_system_3,universal_health_care_3)
 
 write_excel_csv(merged_data, 'Data/merged_data.xlsx')
 view(merged_data)
 ```
 
-```{r}
+```{r, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
 unique(merged_data$Language)
 ```
 
-```{r, working with the text, fig.width=12, fig.height=4.5}
+```{r, working with the text, fig.width=12, fig.height=4.5, echo=FALSE}
 library(tidytext)
 library(tm)
 library(dplyr)
@@ -57,18 +60,18 @@ top_20 <- head(doc_matrix_df, 20)
 top_20
 ```
 
-```{r, bar chart}
+```{r, bar chart, echo=FALSE}
 top_20%>%
   ggplot(aes(reorder(word,freq), freq)) + geom_bar(stat = "identity") + xlab("Term") + ylab("Frequency") + labs(title = "Most Frequent Terms Within Tweets Relating to Medicare For All")
 
 ```
 
-```{r, associations}
-findAssocs(doc_matrix, terms = c('health','care','system'), corlimit = 0.25)
+```{r, associations, echo=FALSE}
+findAssocs(doc_matrix, terms = c('health','care','system', 'biden', 'trump'), corlimit = 0.25)
 
 ```
 
-```{r, sentiment scores, warning=F, message=FALSE}
+```{r, sentiment scores, warning=F, message=FALSE, echo=FALSE}
 df_sentiment <- data_frame(text = character(), positive = double(), negative = double())
 for(index in seq_along(corpus)){
   tweet <- corpus[[index]]$content
@@ -105,7 +108,7 @@ for(index in seq_along(corpus)){
 ```
 
 
-```{r, df_sentiment processing, warning=FALSE, message=FALSE}
+```{r, df_sentiment processing, warning=FALSE, message=FALSE, echo=FALSE}
 df_sentiment%>%
   replace_na(list(positive = 0, negative = 0, text = "Blank")) -> df_sentiment
 
@@ -116,7 +119,7 @@ write_excel_csv(df_sentiment, 'Data/sentiment_scores.xlsx')
 ```
 
 
-```{r, sentiment score visualization, warning=FALSE, message=FALSE}
+```{r, sentiment score visualization, warning=FALSE, message=FALSE, echo=FALSE}
 df_sentiment%>%
   ggplot(aes(total)) + labs(title = "Distribution of Sentiment Towards Medicare For All", x = 'Sentiment Rating (5 Highly Positive, -5 Highly Negative)', y = "Number of Tweets") + theme(plot.title = element_text(hjust = 0.5)) -> fig_1
 
@@ -125,6 +128,9 @@ fig_1 + geom_histogram()
 fig_1 + geom_density()
 
 summary(df_sentiment$total)
+
+dim(df_sentiment)
+corpus
 ```
 
 
