@@ -19,14 +19,17 @@ universal_health_care_3 <- read_excel("Data/universal_health_care_3.xlsx")
 medicare_for_all_4 <- read_excel("Data/medicare_for_all_4.xlsx")
 single_payer_system_4 <- read_excel("Data/single_payer_system_4.xlsx")
 universal_health_care_4 <- read_excel("Data/universal_health_care_4.xlsx")
+medicare_for_all_5 <- read_excel("Data/medicare_for_all_5.xlsx")
+single_payer_system_5 <- read_excel("Data/single_payer_system_5.xlsx")
+universal_health_care_5 <- read_excel("Data/universal_health_care_5.xlsx")
 
 ```
 
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages(library(tidyverse))
-merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2,medicare_for_all_3,single_payer_system_3,universal_health_care_3,medicare_for_all_4,single_payer_system_4,universal_health_care_4)
-
+merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2,medicare_for_all_3,single_payer_system_3,universal_health_care_3,medicare_for_all_4,single_payer_system_4,universal_health_care_4,medicare_for_all_5,single_payer_system_5,universal_health_care_5)
+merged_data_1 <- merged_data
 dim(merged_data)
 merged_data[!duplicated(merged_data$Text),] -> merged_data
 dim(merged_data)
@@ -185,5 +188,11 @@ paste(round(percentages$Dislike),'%','Dislike') -> dl
 pie3D(slices, labels = c(fv,nt,dl), col = c("green", "grey","red"),  main = "Attitudes Towards Medicare For All Based on Tweets", border = "black", theta = .8, explode = .2, labelcex = 1.7, radius = 0.83)
 
 view(df_sentiment)
+```
+
+```{r}
+total_number_of_tweets <- data_frame(inital_number_of_tweets = nrow(merged_data_1),cleaned_number_of_tweets = nrow(merged_data), final_number_of_tweets = nrow(df_sentiment))
+
+total_number_of_tweets
 ```
 
