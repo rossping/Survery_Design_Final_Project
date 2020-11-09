@@ -8,3 +8,4 @@ Sentiment scores calculated using Bing index, producing a positve and negative s
 
 Real time Twitter data comes from https://www.vicinitas.io with tags: medicare for all, single-payer system, and universal health care. Data was collected starting on October 27th up until November 3rd 2020.
 
+New edits! 
