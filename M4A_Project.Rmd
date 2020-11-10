@@ -22,13 +22,17 @@ universal_health_care_4 <- read_excel("Data/universal_health_care_4.xlsx")
 medicare_for_all_5 <- read_excel("Data/medicare_for_all_5.xlsx")
 single_payer_system_5 <- read_excel("Data/single_payer_system_5.xlsx")
 universal_health_care_5 <- read_excel("Data/universal_health_care_5.xlsx")
+medicare_for_all_6 <- read_excel("Data/medicare_for_all_6.xlsx")
+single_payer_system_6 <- read_excel("Data/single_payer_system_6.xlsx")
+universal_health_care_6 <- read_excel("Data/universal_health_care_6.xlsx")
+
 
 ```
 
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages(library(tidyverse))
-merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2,medicare_for_all_3,single_payer_system_3,universal_health_care_3,medicare_for_all_4,single_payer_system_4,universal_health_care_4,medicare_for_all_5,single_payer_system_5,universal_health_care_5)
+merged_data <- bind_rows(medicare_for_all_1,single_payer_system_1,universal_health_care_1,medicare_for_all_2,single_payer_system_2,universal_health_care_2,medicare_for_all_3,single_payer_system_3,universal_health_care_3,medicare_for_all_4,single_payer_system_4,universal_health_care_4,medicare_for_all_5,single_payer_system_5,universal_health_care_5, medicare_for_all_6,single_payer_system_6,universal_health_care_6)
 merged_data_1 <- merged_data
 dim(merged_data)
 merged_data[!duplicated(merged_data$Text),] -> merged_data
@@ -110,6 +114,8 @@ for(index in seq_along(corpus)){
       add_row(negative = rating$negative, positive = rating$positive, text = tweet, date = ts) -> df_sentiment
   }
 }
+
+
 ```
 
 
@@ -122,6 +128,8 @@ df_sentiment%>%
 
 df_sentiment[!duplicated(df_sentiment$text),] -> df_sentiment
 write_excel_csv(df_sentiment, 'Data/sentiment_scores.xlsx')
+
+view(df_sentiment)
 ```
 
 
